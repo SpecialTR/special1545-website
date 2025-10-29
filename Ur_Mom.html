@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technician Sound Clicker</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+
+    <style>
+        .Anan {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 14px;
+            color: #dc2626; /* Red */
+        }
+
+        .Click {
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            font-size: 14px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            display: block;
+            text-align: center;
+            background-color: black;
+            border: none;
+            height: 50px;
+            width: 180px;
+            margin-top: 15px;
+            line-height: 50px;
+            border-radius: 8px;
+            transition: opacity 0.2s, transform 0.1s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Hover and Active states for the button */
+        .Click:hover {
+            opacity: 0.8;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .Click:active {
+            transform: scale(0.98);
+        }
+
+        /* Ensure the body takes full height and centers content */
+        html, body {
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f3f4f6;
+        }
+
+        /* Style for the added image */
+        .technician-image {
+            max-width: 100%; /* Ensure it fits within the container */
+            height: auto;
+            border-radius: 8px; /* Optional: adds rounded corners to the image */
+            margin-bottom: 20px; /* Space below the image */
+        }
+    </style>
+
+</head>
+
+<body>
+<div class="flex flex-col items-center p-8 rounded-xl bg-white shadow-2xl w-80">
+    <img src="ab67616d0000b2736b96a959d9b4baa257127526.jpeg" alt="Technician" class="technician-image">
+    <div class="Anan mb-4 text-xl font-bold">
+        The Greatest Technician That's Ever Lived
+    </div>
+    <button id="audioButton" class="Click">
+        Spread 'em
+    </button>
+    <div id="message" class="mt-4 text-sm text-gray-600 font-inter">
+        Loading audio...
+    </div>
+</div>
+
+<script>
+    console.log("Ur Mama Is Fat :)")
+    // Define the path to your audio file
+    const audioFilePath = "the-greatest-technician-thats-ever-lived_RKE2ymg.mp3";
+    let player;
+    let isLoaded = false;
+    const messageElement = document.getElementById('message');
+    const buttonElement = document.getElementById('audioButton');
+
+    /**
+     * Initializes the Tone.js Player and loads the audio file.
+     */
+    function initPlayer() {
+        // Create a Tone.Player. 'toDestination()' connects it to your speakers.
+        player = new Tone.Player({
+            url: audioFilePath,
+            onload: () => {
+                isLoaded = true;
+                // Updated message to reflect the new button text
+                messageElement.textContent = "Click 'Spread 'em' to hear the technician!";
+                buttonElement.disabled = false;
+                buttonElement.style.opacity = 1;
+            },
+            onerror: (error) => {
+                messageElement.textContent = `Error loading audio: ${error.message}`;
+                console.error("Audio loading error:", error);
+            }
+        }).toDestination();
+
+        // Initially disable the button until the audio is loaded
+        buttonElement.disabled = true;
+        buttonElement.style.opacity = 0.5;
+    }
+
+    /**
+     * Starts the Tone.js audio context and plays the audio file.
+     */
+    function playAudioClip() {
+        if (!isLoaded) {
+            messageElement.textContent = "Audio is still loading, please wait...";
+            return;
+        }
+
+        // Must start the AudioContext on a user interaction for browsers
+        Tone.start().then(() => {
+            // Check if the player is currently playing
+            if (player.state !== 'started') {
+                // 'start(0)' plays the audio from the beginning immediately
+                player.start(0);
+                messageElement.textContent = "Playing...";
+
+                // Update message when audio finishes
+                player.onstop = () => {
+                    messageElement.textContent = "Click 'Spread 'em' to hear the technician!";
+                };
+            } else {
+                // If it's already playing, stop it and start again
+                player.stop();
+                // A small timeout ensures the stop event fires before a new start
+                setTimeout(() => {
+                    player.start(0);
+                }, 10);
+            }
+        }).catch(error => {
+            console.error("Error starting Tone.js context:", error);
+            messageElement.textContent = "Could not start audio. Try refreshing the page!";
+        });
+    }
+
+    // Wait until the page is fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+        initPlayer(); // Load the audio file
+
+        // Attach the sound function to the button click event
+        buttonElement.addEventListener('click', playAudioClip);
+    });
+</script>
+</body>
+</html>
