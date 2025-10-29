@@ -75,7 +75,7 @@
         The Greatest Technician That's Ever Lived
     </div>
     <button id="audioButton" class="Click">
-        Spread 'em
+        Click Me!
     </button>
     <div id="message" class="mt-4 text-sm text-gray-600 font-inter">
         Loading audio...
@@ -135,7 +135,7 @@
 
                 // Update message when audio finishes
                 player.onstop = () => {
-                    messageElement.textContent = "Click 'Spread 'em' to hear the technician!";
+                    messageElement.textContent = "The Greatest Technician That's Ever Lived!";
                 };
             } else {
                 // If it's already playing, stop it and start again
@@ -160,4 +160,5 @@
     });
 </script>
 </body>
+
 </html>
